@@ -4,11 +4,11 @@ import time
 
 ON = 1
 OFF = 0
-PIN = 8
+PIN = 13
 # delay in seconds
 DELAY = 10
 
-board = pyfirmata.Arduino('/dev/ttyACM2')
+board = pyfirmata.Arduino('/dev/ttyACM3')
 board.digital[PIN].mode = pyfirmata.OUTPUT
 
 
@@ -29,13 +29,14 @@ def set_pin_high_low(pin, value):
     :param value: hex
     :return: None
     """
-    # import pdb;
-    # pdb.set_trace()
 
-    logging.warning(msg="In set_pin_high_low function. value = {}".format(value))
-    board.digital[pin].write(value)
+    try:
+        logging.warning(msg="In set_pin_high_low function. value = {}".format(value))
+        board.digital[pin].write(value)
+    except Exception as e:
+        print(e)
 
-    
+
 def main():
     """Main function"""
 
