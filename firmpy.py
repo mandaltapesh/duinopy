@@ -4,11 +4,11 @@ import time
 
 ON = 1
 OFF = 0
-PIN = 13
+PIN = 8
 # delay in seconds
-DELAY = 10
+DELAY = 1
 
-board = pyfirmata.Arduino('/dev/ttyACM3')
+board = pyfirmata.Arduino('/dev/ttyACM0')
 board.digital[PIN].mode = pyfirmata.OUTPUT
 
 
@@ -37,17 +37,47 @@ def set_pin_high_low(pin, value):
         print(e)
 
 
-def main():
-    """Main function"""
+def manual_main():
+    """
+    Function for manual toggling of LED
+    :return: None
+    """
 
     while True:
         choice = int(input("Enter a choice \n 1. Turn LED on [1] \n 2. Turn LED off \n 3. Quit [3] \n >> "))
         if choice == 1:
             set_pin_high_low(PIN, ON)
-            for_delay(DELAY)
         elif choice == 2:
             set_pin_high_low(PIN, OFF)
-            for_delay(DELAY)
+        else:
+            break
+
+
+def auto_main():
+    """
+    Function to auto blink LED
+    :return: None
+    """
+    counter = 9
+    while counter:
+        set_pin_high_low(PIN, ON)
+        for_delay(DELAY)
+        set_pin_high_low(PIN, OFF)
+        for_delay(DELAY)
+        counter -= 1
+
+
+def main():
+    """Main function"""
+
+    while True:
+        main_menu_choice = int(input(
+            "Do you want to \n 1. Manually toggle the LED [1] \n 2. Auto blink on and off [2] \n 3. Quit \n >> "))
+
+        if main_menu_choice == 1:
+            manual_main()
+        if main_menu_choice == 2:
+            auto_main()
         else:
             board.exit()
             break
